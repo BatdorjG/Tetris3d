@@ -19,11 +19,11 @@ static void getCameraGridBasis(Camera3D cam, int32_t *fx, int32_t *fz, int32_t *
 }
 
 Rectangle getStartButtonRect(void) {
-    return (Rectangle){ .x = (float)WINDOW_WIDTH / 2.0f - 150.0f, .y = 440.0f, .width = 300.0f, .height = 65.0f };
+    return Rectangle{ (float)WINDOW_WIDTH / 2.0f - 150.0f, 440.0f, 300.0f, 65.0f };
 }
 
 Rectangle getExitButtonRect(void) {
-    return (Rectangle){ .x = (float)WINDOW_WIDTH / 2.0f - 150.0f, .y = 530.0f, .width = 300.0f, .height = 65.0f };
+    return Rectangle{ (float)WINDOW_WIDTH / 2.0f - 150.0f, 530.0f, 300.0f, 65.0f };
 }
 
 void updateMenu(Game *game) {

@@ -54,10 +54,10 @@ Mat4 Mat4_rotateZ(float angle) {
 }
 
 Vector3 MatrixTransform(Vector3 pos, Mat4 mat) {
-    return (Vector3){
-        .x = mat.m[0][0] * pos.x + mat.m[0][1] * pos.y + mat.m[0][2] * pos.z + mat.m[0][3],
-        .y = mat.m[1][0] * pos.x + mat.m[1][1] * pos.y + mat.m[1][2] * pos.z + mat.m[1][3],
-        .z = mat.m[2][0] * pos.x + mat.m[2][1] * pos.y + mat.m[2][2] * pos.z + mat.m[2][3]
+    return Vector3{
+        mat.m[0][0] * pos.x + mat.m[0][1] * pos.y + mat.m[0][2] * pos.z + mat.m[0][3],
+        mat.m[1][0] * pos.x + mat.m[1][1] * pos.y + mat.m[1][2] * pos.z + mat.m[1][3],
+        mat.m[2][0] * pos.x + mat.m[2][1] * pos.y + mat.m[2][2] * pos.z + mat.m[2][3]
     };
 }
 
@@ -70,10 +70,10 @@ float centered(int i, int n) {
 }
 
 Vector3 gridToWorld(int gx, int gy, int gz) {
-    return (Vector3){
-        .x = centered(gx, BOARD_X) * SIZE,
-        .y = centered(gy, BOARD_Y) * SIZE,
-        .z = centered(gz, BOARD_Z) * SIZE
+    return Vector3{
+        centered(gx, BOARD_X) * SIZE,
+        centered(gy, BOARD_Y) * SIZE,
+        centered(gz, BOARD_Z) * SIZE
     };
 }
 
@@ -82,10 +82,10 @@ Vector3 rotate_camera(Vector3 start_pos, Vector3 target_pos, float angle) {
     float dz = start_pos.z - target_pos.z;
     Mat4 rot_mat = Mat4_rotateY(angle);
 
-    Vector3 rotated = MatrixTransform((Vector3){ dx, start_pos.y, dz }, rot_mat);
-    return (Vector3){
-        .x = rotated.x + target_pos.x,
-        .y = rotated.y,
-        .z = rotated.z + target_pos.z
+    Vector3 rotated = MatrixTransform(Vector3{ dx, start_pos.y, dz }, rot_mat);
+    return Vector3{
+        rotated.x + target_pos.x,
+        rotated.y,
+        rotated.z + target_pos.z
     };
 }
