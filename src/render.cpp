@@ -13,7 +13,7 @@ typedef struct {
 } Face;
 
 static inline Vector3 v3(float x, float y, float z) {
-    return (Vector3){ x, y, z };
+    return Vector3{ x, y, z };
 }
 
 // u x v == n for every face, so triangles wind CCW from outside (backface culling stays on)
@@ -27,10 +27,10 @@ static const Face FACES[6] = {
 };
 
 static Vector3 faceCorner(Vector3 p, Face f, float su, float sv, float h) {
-    return (Vector3){
-        .x = p.x + (f.n.x + su * f.u.x + sv * f.v.x) * h,
-        .y = p.y + (f.n.y + su * f.u.y + sv * f.v.y) * h,
-        .z = p.z + (f.n.z + su * f.u.z + sv * f.v.z) * h
+    return Vector3{
+        p.x + (f.n.x + su * f.u.x + sv * f.v.x) * h,
+        p.y + (f.n.y + su * f.u.y + sv * f.v.y) * h,
+        p.z + (f.n.z + su * f.u.z + sv * f.v.z) * h
     };
 }
 
@@ -61,7 +61,7 @@ static void drawFloor(void) {
     float hz = BOARD_Z * SIZE / 2.0f;
     float fy = -(BOARD_Y * SIZE / 2.0f);
 
-    DrawCube(v3(0.0f, fy - 0.03f, 0.0f), hx * 2.0f, 0.06f, hz * 2.0f, (Color){ 25, 30, 55, 255 });
+    DrawCube(v3(0.0f, fy - 0.03f, 0.0f), hx * 2.0f, 0.06f, hz * 2.0f, Color{ 25, 30, 55, 255 });
 
     Color line = Fade(SKYBLUE, 0.35f);
     for (int i = 0; i <= BOARD_X; i++) {
@@ -206,15 +206,15 @@ void drawMenu(const Game *game) {
 }
 
 void drawHUD(void) {
-    DrawRectangleRounded((Rectangle){ 12.0f, 12.0f, 280.0f, 96.0f }, 0.2f, 8, Fade(BLACK, 0.55f));
+    DrawRectangleRounded(Rectangle{ 12.0f, 12.0f, 280.0f, 96.0f }, 0.2f, 8, Fade(BLACK, 0.55f));
     DrawText(TextFormat("SCORE  %d", SCORE), 28, 24, 30, WHITE);
     DrawText(TextFormat("BEST   %d", HIGH_SCORE), 28, 66, 24, GOLD);
 
-    const char *hint = "Move WASD   Rotate Q/E/R   Drop SPACE   Camera H/L   Menu M";
+    const char *hint = "Move WASD   Rotate Q/E/R   Drop SPACE   Camera J/;   Menu M";
     int w = MeasureText(hint, 20);
     int bx = (WINDOW_WIDTH - w) / 2;
     DrawRectangleRounded(
-        (Rectangle){ (float)(bx - 16), (float)(WINDOW_HEIGHT - 52), (float)(w + 32), 36.0f },
+        Rectangle{ (float)(bx - 16), (float)(WINDOW_HEIGHT - 52), (float)(w + 32), 36.0f },
         0.4f,
         8,
         Fade(BLACK, 0.55f)
@@ -236,8 +236,8 @@ void drawFrame(const Game *game) {
         0,
         WINDOW_WIDTH,
         WINDOW_HEIGHT,
-        (Color){ 28, 34, 66, 255 },
-        (Color){ 6, 6, 14, 255 }
+        Color{ 28, 34, 66, 255 },
+        Color{ 6, 6, 14, 255 }
     );
     rlDrawRenderBatchActive();
     rlEnableDepthMask();
