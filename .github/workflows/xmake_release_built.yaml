@@ -1,0 +1,72 @@
+name: xmake on multiple platforms
+
+on:
+  push:
+    branches: [ "main" ]
+    tags: [ "v*" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    steps:
+    - uses: actions/checkout@v6
+
+    - uses: xmake-io/github-action-setup-xmake@v1
+      with:
+        xmake-version: latest
+    
+    - name: Install Linux deps
+      if: runner.os == 'Linux'
+      run: sudo apt-get update && sudo apt-get install -y libgl1-mesa-dev libglu1-mesa-dev pkg-config
+
+    - name: Cache xmake packages
+      uses: actions/cache@v5
+      with:
+        path: |
+          ~/.xmake
+          ${{ github.workspace }}/.xmake
+        key: xmake-${{ matrix.os }}-${{ hashFiles('xmake.lua') }}
+
+    - name: Configure
+      run: xmake f -y -m release
+
+    - name: Build
+      run: xmake -y -v
+
+    - name: Upload binary
+      uses: actions/upload-artifact@v7
+      with:
+        name: snake3d-${{ matrix.os }}
+        path: build/
+  release:
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+    - uses: actions/download-artifact@4 
+      with:
+        path: dist
+
+    - name: Zip per platform
+      run: |
+        cd dist
+        for d in */; do
+          zip -r "${d%/}.zip" "$d"
+        done
+
+    - uses: softprops/action-gh-release@v2
+      with:
+        files: dist/*.zip
+        generate_release_notes: true
+
